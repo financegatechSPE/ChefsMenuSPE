@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SigEp Meals · Chef's Menu</title>
+<meta name="theme-color" content="#003057">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SigEp Meals">
+<script>
+  // Apply saved theme before the page paints (no flash). "auto" follows the phone's setting.
+  try{ const t = localStorage.getItem("sigep_theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; }catch(e){}
+</script>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>
+  /* ---------- Theme tokens ---------- */
+  :root{
+    --navy:#003057; --gold:#B3A369; --red:#9B1B30; --green-brand:#4E8A35; --green-light:#8DC63F;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --safe-b: env(safe-area-inset-bottom, 0px); --safe-t: env(safe-area-inset-top, 0px);
+    /* light */
+    --bg:#F5F2EA; --surface:#FFFFFF; --surface-2:#F6F2E7; --field:#FBFAF6;
+    --ink:#16202C; --ink-2:#3B4452; --muted:#6B7280; --line:#E7E1D2; --line-2:#F0EBDF;
+    --accent:#003057; --on-accent:#FFFFFF; --accent-ink:#003057;
+    --lunch:#4E8A35; --dinner:#5B2C83;
+    --gold-bg:#F1EAD3; --gold-ink:#5A4E25;
+    --ok-bg:#EAF4DF; --ok-line:#CFE6B8; --ok-ink:#2F5A1E;
+    --off-bg:#EEECE6; --off-ink:#8C877A;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 6px 18px rgba(16,24,40,.06);
+    --nav-bg:rgba(255,255,255,.82);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#08121F; --surface:#0F1E33; --surface-2:#13253F; --field:#0B182A;
+      --ink:#EEF1F6; --ink-2:#C3CBD8; --muted:#8C98AB; --line:#1E3452; --line-2:#182B45;
+      --accent:#C9B676; --on-accent:#08121F; --accent-ink:#D8C88F;
+      --lunch:#8DC63F; --dinner:#B48CE6;
+      --gold-bg:rgba(201,182,118,.14); --gold-ink:#E2D49E;
+      --ok-bg:rgba(141,198,63,.13); --ok-line:rgba(141,198,63,.3); --ok-ink:#B9E08A;
+      --off-bg:rgba(255,255,255,.06); --off-ink:#6F7C90;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+      --nav-bg:rgba(10,22,38,.82);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#08121F; --surface:#0F1E33; --surface-2:#13253F; --field:#0B182A;
+    --ink:#EEF1F6; --ink-2:#C3CBD8; --muted:#8C98AB; --line:#1E3452; --line-2:#182B45;
+    --accent:#C9B676; --on-accent:#08121F; --accent-ink:#D8C88F;
+    --lunch:#8DC63F; --dinner:#B48CE6;
+    --gold-bg:rgba(201,182,118,.14); --gold-ink:#E2D49E;
+    --ok-bg:rgba(141,198,63,.13); --ok-line:rgba(141,198,63,.3); --ok-ink:#B9E08A;
+    --off-bg:rgba(255,255,255,.06); --off-ink:#6F7C90;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+    --nav-bg:rgba(10,22,38,.82);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+  button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  textarea,input{font:inherit;color:var(--ink)}
+
+  /* ---------- Header ---------- */
+  header{position:sticky;top:0;z-index:5;color:#fff;padding:calc(14px + var(--safe-t)) 18px 0;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(179,163,105,.28) 0%, rgba(179,163,105,0) 55%),
+      linear-gradient(160deg,#0B3C6B 0%,#003057 45%,#001B33 100%);
+    box-shadow:0 6px 20px rgba(0,20,40,.25)}
+  .brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .crest{display:flex;align-items:center;gap:11px;min-width:0}
+  .letters{height:40px;min-width:40px;padding:0 9px;border-radius:11px;display:grid;place-items:center;white-space:nowrap;
+    font-family:var(--serif);font-weight:700;font-size:15px;letter-spacing:1px;line-height:1;
+    background:linear-gradient(160deg,#B4243C,#7E1426);border:1.5px solid var(--gold);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 3px 10px rgba(0,0,0,.25)}
+  .titles .kicker{font-size:10.5px;font-weight:700;letter-spacing:.16em;white-space:nowrap;text-transform:uppercase;color:var(--gold)}
+  .titles h1{margin:1px 0 0;font-family:var(--serif);font-size:21px;font-weight:700;letter-spacing:.2px;line-height:1.1}
+  .hdr-right{display:flex;align-items:center;gap:8px}
+  .cm-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    padding:5px 10px 5px 6px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;backdrop-filter:blur(6px)}
+  .cm-dot{width:20px;height:20px;border-radius:50%;border:3px solid var(--green-brand);display:grid;place-items:center;
+    font-weight:800;font-size:10px;color:var(--green-light)}
+  .themebtn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff}
+  .themebtn svg{width:17px;height:17px}
+  .weekbar{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-bottom:12px;
+    border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--gold),rgba(179,163,105,.15)) 1}
+  .weekbar .wk{font-family:var(--serif);font-size:15px}
+  .weekbar .wk b{color:var(--gold)}
+  .weekbar .sub{font-size:12px;opacity:.7;margin-top:2px;font-variant-numeric:tabular-nums}
+
+  main{padding:18px 16px calc(104px + var(--safe-b));max-width:760px;margin:0 auto}
+  .view{display:none}
+  .view.active{display:block;animation:fadeUp .28s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2.section{font-family:var(--serif);font-size:24px;margin:2px 0 4px;letter-spacing:-.2px}
+  p.lead{color:var(--muted);margin:0 0 14px;font-size:14px;line-height:1.45}
+  p.lead b{color:var(--ink)}
+
+  /* ---------- Cards (shared) ---------- */
+  .daycard,.bigmeal,.sugg,.lp-name,.lp-day,.empty{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .dayhead{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  .dayhead .dn{font-weight:800;font-size:15px;letter-spacing:.02em}
+  .dayhead .dd{font-size:12px;color:var(--muted)}
+  .todaytag{font-size:10px;font-weight:800;letter-spacing:.08em;background:var(--gold);color:#002240;padding:3px 7px;border-radius:999px;margin-left:8px}
+
+  /* ---------- Week view ---------- */
+  .daycard{border-radius:18px;margin-bottom:12px;overflow:hidden}
+  .daycard.today{border-color:var(--gold);box-shadow:0 0 0 2px rgba(179,163,105,.28),var(--shadow)}
+  .meals{display:grid;grid-template-columns:1fr 1fr}
+  .meal{padding:12px 14px;border-right:1px solid var(--line)}
+  .meal:last-child{border-right:0}
+  .meal .lbl{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--lunch)}
+  .meal:nth-child(2) .lbl{color:var(--dinner)}
+  .meal .t{font-family:var(--serif);font-weight:700;font-size:16px;margin:3px 0 4px;line-height:1.2}
+  .meal .d{font-size:12.5px;color:var(--muted);line-height:1.35}
+  .meal.none .t{color:var(--off-ink);font-style:italic;font-weight:400}
+  .daycard .go{display:block;width:100%;border:0;border-top:1px solid var(--line);background:transparent;padding:11px;font-size:13px;font-weight:700;color:var(--accent-ink)}
+
+  /* ---------- Day view ---------- */
+  .daypicker{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin-bottom:12px;scrollbar-width:none}
+  .daypicker::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 12px;text-align:center;min-width:62px;box-shadow:var(--shadow);transition:transform .15s}
+  .chip:active{transform:scale(.96)}
+  .chip .a{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
+  .chip .b{font-family:var(--serif);font-size:19px;font-weight:700}
+  .chip.sel{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+  .chip.sel .a{color:inherit;opacity:.75}
+  .bigmeal{position:relative;border-radius:20px;padding:20px 18px 18px;margin-bottom:14px;overflow:hidden}
+  .bigmeal::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--lunch),transparent)}
+  .bigmeal.dinner::before{background:linear-gradient(90deg,var(--dinner),transparent)}
+  .bigmeal .lbl{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;color:#fff;background:var(--green-brand);padding:4px 9px;border-radius:999px}
+  .bigmeal.dinner .lbl{background:#5B2C83}
+  .bigmeal h3{font-family:var(--serif);font-size:27px;margin:10px 0 6px;line-height:1.12;letter-spacing:-.3px}
+  .bigmeal .desc{color:var(--ink-2);font-size:15px;line-height:1.45;margin:0}
+  .sides{margin:11px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+  .sides li{font-size:12.5px;background:var(--gold-bg);color:var(--gold-ink);padding:5px 10px;border-radius:999px}
+  .rate{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+  .rate .q{font-weight:700;font-size:14px;margin-bottom:8px;display:flex;justify-content:space-between}
+  .rate .q span{font-weight:400;color:var(--muted);font-size:12px}
+  .scale-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:5px}
+  .scale{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+  .scale button{border:1px solid var(--line);background:var(--field);border-radius:10px;padding:9px 0;font-weight:700;font-size:14px;transition:transform .12s,background .15s}
+  .scale button:active{transform:scale(.92)}
+  .scale button.sel{background:var(--green-brand);border-color:var(--green-brand);color:#fff;box-shadow:0 4px 12px rgba(78,138,53,.35)}
+  textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;min-height:76px;resize:vertical;background:var(--field)}
+  input[type=text],input[type=password]{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--field)}
+  textarea:focus,input:focus{outline:2px solid var(--gold);outline-offset:0;border-color:transparent}
+  textarea::placeholder,input::placeholder{color:var(--muted);opacity:.85}
+  .row{display:flex;gap:8px;margin-top:8px;align-items:center}
+  .btn{border:0;border-radius:12px;padding:11px 16px;font-weight:800;background:var(--accent);color:var(--on-accent);transition:transform .12s,opacity .15s}
+  .btn:active{transform:scale(.97)}
+  .btn.gold{background:var(--gold);color:#002240}
+  .btn:disabled{opacity:.4}
+  .done{display:flex;gap:10px;align-items:center;background:var(--ok-bg);border:1px solid var(--ok-line);color:var(--ok-ink);border-radius:12px;padding:10px 12px;margin-top:14px;font-size:14px}
+  .done .score{font-family:var(--serif);font-size:22px;font-weight:700}
+  .empty{text-align:center;padding:30px 16px;color:var(--muted);border-style:dashed;border-radius:16px;box-shadow:none}
+
+  /* ---------- Suggestions ---------- */
+  .sugg{border-radius:18px;padding:14px;margin-bottom:12px}
+  .sugg .h{display:flex;align-items:center;gap:10px}
+  .sugg .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:18px}
+  .sugg h3{margin:0;font-size:16px}
+  .sugg .s{font-size:12px;color:var(--muted)}
+  .sugg ul{list-style:none;margin:10px 0 0;padding:0}
+  .sugg li{font-size:13.5px;padding:7px 0;border-top:1px solid var(--line-2)}
+  .sugg li small{color:var(--muted)}
+
+  /* ---------- Tabs ---------- */
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(4,1fr);
+    padding:6px 8px calc(6px + var(--safe-b));background:var(--nav-bg);border-top:1px solid var(--line);
+    backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px)}
+  nav.tabs button{border:0;background:none;padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted);transition:color .15s}
+  nav.tabs .ico{width:44px;height:28px;border-radius:999px;display:grid;place-items:center;transition:background .2s}
+  nav.tabs svg{width:22px;height:22px}
+  nav.tabs button.active{color:var(--accent-ink)}
+  nav.tabs button.active .ico{background:var(--gold-bg)}
+  nav.tabs .bar{display:none}
+
+  /* ---------- Late plates ---------- */
+  .lp-name{border-radius:18px;padding:14px;margin-bottom:12px}
+  .lp-name label{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--muted);display:block;margin-bottom:6px}
+  .lp-day{border-radius:18px;margin-bottom:10px;overflow:hidden}
+  .lp-day .dayhead{padding:9px 14px}
+  .lp-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-top:1px solid var(--line)}
+  .lp-day .dayhead + .lp-row{border-top:0}
+  .lp-row input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent);flex:0 0 auto}
+  .lp-row .info{flex:1;min-width:0}
+  .lp-row .m{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--lunch)}
+  .lp-row .m.dinner{color:var(--dinner)}
+  .lp-row .dish{font-family:var(--serif);font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pill{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;white-space:nowrap}
+  .pill.open{background:var(--gold-bg);color:var(--gold-ink)}
+  .pill.closed{background:var(--off-bg);color:var(--off-ink)}
+  .pill.req{background:var(--ok-bg);color:var(--ok-ink)}
+  .lp-row.closed .dish,.lp-row.closed .m{opacity:.45}
+  .linkbtn{border:0;background:none;color:#D9475F;font-size:12px;font-weight:700;text-decoration:underline;padding:4px}
+  .lp-submit{position:sticky;bottom:calc(76px + var(--safe-b));padding:10px 0 4px;background:linear-gradient(to top,var(--bg) 70%,transparent)}
+  .lp-submit .btn{width:100%;padding:14px;box-shadow:var(--shadow)}
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:26px}
+
+  /* ---------- Profile setup sheet ---------- */
+  .ov{position:fixed;inset:0;z-index:30;background:rgba(4,12,24,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center}
+  .ov.show{display:flex;animation:fadeIn .2s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .psheet{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:10px 20px calc(20px + var(--safe-b));
+    box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:slideUp .32s cubic-bezier(.2,.8,.2,1)}
+  @keyframes slideUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+  .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px}
+  .p-hero{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .p-hero h2{margin:0;font-family:var(--serif);font-size:24px;letter-spacing:-.2px}
+  .p-hero p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+  .p-sec{margin-top:18px}
+  .p-sec > label,.p-sec .lab{display:block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .seg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px}
+  .seg button{border:0;background:none;border-radius:10px;padding:10px 4px;font-weight:700;font-size:14px;color:var(--ink-2)}
+  .seg button small{display:block;font-weight:500;font-size:11px;color:var(--muted);margin-top:1px}
+  .seg button.sel{background:var(--accent);color:var(--on-accent)}
+  .seg button.sel small{color:inherit;opacity:.75}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chips button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+  .chips button.sel{background:var(--ok-bg);border-color:var(--green-brand);color:var(--ok-ink)}
+  .chips button.sel::before{content:"✓ "}
+  .privacy{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:16px;line-height:1.4}
+  .p-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+  .p-actions .btn{width:100%;padding:14px;font-size:15px}
+  .p-actions .skip{border:0;background:none;color:var(--muted);font-weight:600;padding:8px}
+  .p-err{color:#D9475F;font-size:12px;margin-top:6px;display:none}
+
+  /* ---------- Install hint + toast ---------- */
+  .install{background:linear-gradient(150deg,#0B3C6B,#002240);color:#fff;border:1px solid rgba(179,163,105,.35);border-radius:16px;padding:12px 14px;margin-bottom:14px;font-size:13px;display:none;gap:10px;align-items:flex-start}
+  .install.show{display:flex}
+  .install b{color:var(--gold)}
+  .install .x{margin-left:auto;background:none;border:0;color:#fff;opacity:.7;font-size:18px;line-height:1}
+  .toast{position:fixed;left:50%;bottom:calc(88px + var(--safe-b));transform:translateX(-50%) translateY(20px);opacity:0;background:#16202C;color:#fff;border:1px solid rgba(255,255,255,.1);
+    padding:10px 16px;border-radius:999px;font-size:13px;transition:.25s;z-index:10;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:420px){ .meals{grid-template-columns:1fr} .meal{border-right:0;border-bottom:1px solid var(--line)} .meal:last-child{border-bottom:0} .scale{grid-template-columns:repeat(5,1fr)} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brandrow">
+    <div class="crest">
+      <div class="letters" aria-hidden="true">ΣΦΕ</div>
+      <div class="titles">
+        <div class="kicker">Georgia Tech · SigEp</div>
+        <h1>Meal Plan</h1>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <button class="themebtn" id="profileBtn" aria-label="Your profile" onclick="openProfile()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      </button>
+      <button class="themebtn" id="themeBtn" aria-label="Switch light/dark mode" onclick="toggleTheme()"></button>
+    </div>
+  </div>
+  <div class="weekbar">
+    <div><div class="wk" id="weekTitle">Loading menu…</div><div class="sub" id="weekSub"></div></div>
+    <div class="cm-pill" title="Meals by Chef's Menu"><span class="cm-dot">M</span>Chef's Menu</div>
+  </div>
+</header>
+
+<main>
+  <div class="install" id="installHint">
+    <div>📲 <b>Add to your home screen:</b> <span id="installText">tap Share, then “Add to Home Screen.”</span></div>
+    <button class="x" aria-label="Dismiss" onclick="dismissInstall()">×</button>
+  </div>
+
+  <!-- WEEK -->
+  <section class="view" id="view-week">
+    <div id="weekList"></div>
+  </section>
+
+  <!-- DAY -->
+  <section class="view" id="view-day">
+    <div class="daypicker" id="dayPicker"></div>
+    <div id="dayBody"></div>
+  </section>
+
+  <!-- LATE PLATES -->
+  <section class="view" id="view-late">
+    <h2 class="section">Late Plates</h2>
+    <p class="lead">Can’t make a meal? Pick the ones you need saved. Requests close <b>2 hours before</b> each meal: lunch (11:00–12:30) by <b>9:00 AM</b>, dinner (5:00–6:30) by <b>3:00 PM</b>.</p>
+    <div class="lp-name">
+      <label for="lpName">YOUR NAME (goes on the plate)</label>
+      <input type="text" id="lpName" placeholder="First & last name" autocomplete="name">
+      <input type="text" id="lpNote" placeholder="Note for the chef (optional): no sauce, extra rice…" maxlength="120" style="margin-top:8px">
+    </div>
+    <div id="lateList"></div>
+    <div class="lp-submit"><button class="btn" id="lpBtn" disabled onclick="submitLate()">Select meals above</button></div>
+  </section>
+
+  <!-- SUGGESTIONS -->
+  <section class="view" id="view-sugg">
+    <h2 class="section">Suggestions</h2>
+    <p class="lead">Tell Chef's Menu what you want to see next. Requests go into the weekly feedback report for the chef.</p>
+    <div id="suggList"></div>
+  </section>
+
+  <footer>
+    Meals by Chef's Menu · ΣΦΕ Georgia Alpha
+  </footer>
+</main>
+
+<nav class="tabs" aria-label="Views">
+  <button data-view="week">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M7 13h2M11 13h2M15 13h2M7 17h2M11 17h2"/></svg></span>
+    Week<span class="bar"></span>
+  </button>
+  <button data-view="day">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0Z"/><path d="M12 3v3M8 4.5l1 2M16 4.5l-1 2"/></svg></span>
+    Today<span class="bar"></span>
+  </button>
+  <button data-view="late">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></span>
+    Late Plates<span class="bar"></span>
+  </button>
+  <button data-view="sugg">
+    <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/><path d="M9 11h6M9 14h4"/></svg></span>
+    Suggestions<span class="bar"></span>
+  </button>
+</nav>
+
+<!-- One-time profile setup (reopen from the person icon) -->
+<div class="ov" id="profileOv">
+  <div class="psheet" role="dialog" aria-labelledby="pTitle">
+    <div class="grab"></div>
+    <div class="p-hero">
+      <div class="letters" style="color:#fff">ΣΦΕ</div>
+      <div><h2 id="pTitle">Welcome to SigEp Meals</h2><p>Quick setup, once. You can change it anytime.</p></div>
+    </div>
+
+    <div class="p-sec">
+      <label for="pName">Your name</label>
+      <input type="text" id="pName" placeholder="First & last name" autocomplete="name">
+      <div class="p-err" id="pNameErr">Add your name so late plates and ratings are labeled.</div>
+    </div>
+
+    <div class="p-sec">
+      <span class="lab">Meal plan</span>
+      <div class="seg" id="pPlan">
+        <button data-v="Full">Full<small>Every meal</small></button>
+        <button data-v="Half">Half<small>5 per week</small></button>
+      </div>
+      <div class="p-err" id="pPlanErr">Pick Full or Half.</div>
+    </div>
+
+    <div class="p-sec">
+      <span class="lab">Dietary needs & allergies</span>
+      <div class="chips" id="pDiet"></div>
+      <input type="text" id="pDietOther" placeholder="Anything else? e.g. sesame allergy" maxlength="120" style="margin-top:10px">
+    </div>
+
+    <div class="privacy">🔒 <span>Only the meal-plan manager and the chef see this. It’s attached to your late plates so your plate is made right. For serious allergies, still talk to the chef directly.</span></div>
+
+    <div class="p-actions">
+      <button class="btn" onclick="saveProfile()">Save &amp; continue</button>
+      <button class="skip" id="pSkip" onclick="closeProfile(true)">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== SETTINGS ===================== */
+const CONFIG = {
+  // Paste your Google Apps Script web-app URL here to collect responses from everyone in one Google Sheet.
+  // Leave empty to run in demo mode (responses stay on this phone only).
+  BACKEND_URL: "",
+  MENU_URL: "menu.json"        // replaced every Sunday with the new week's menu
+};
+
+/* ===================== STATE ===================== */
+let MENU = null;
+let selDay = null;
+const pending = {};            // mealKey -> rating chosen but not yet submitted
+const DOW = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// All meal times are Georgia Tech (Eastern) time, whatever time zone the phone is in.
+const MEAL_TIMES = { lunch:{start:11*60, end:12*60+30, label:"11:00 AM – 12:30 PM", short:"11–12:30"}, dinner:{start:17*60, end:18*60+30, label:"5:00 – 6:30 PM", short:"5–6:30"} };
+const LATE_CUTOFF_HOURS = 2;
+function nowET(){
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"})
+    .formatToParts(new Date()).map(x=>[x.type,x.value]));
+  return { date:`${p.year}-${p.month}-${p.day}`, min: (+p.hour)*60 + (+p.minute) };
+}
+const todayISO = () => nowET().date;
+const fmtMin = m => { const h=Math.floor(m/60), mm=String(m%60).padStart(2,"0"); return `${(h%12)||12}:${mm} ${h<12?"AM":"PM"}`; };
+const cutoffMin = meal => MEAL_TIMES[meal].start - LATE_CUTOFF_HOURS*60;
+function lateOpen(date, meal){ const n=nowET(); return date > n.date || (date === n.date && n.min < cutoffMin(meal)); }
+function mealStarted(date, meal){ const n=nowET(); return date < n.date || (date === n.date && n.min >= MEAL_TIMES[meal].start); }
+// Ratings for a day's meals close at the start of the NEXT day's lunch (11:00 AM Eastern).
+const RATING_CLOSE_MIN = 11*60;
+const nextDay = iso => { const d = new Date(iso+"T12:00:00Z"); d.setUTCDate(d.getUTCDate()+1); return d.toISOString().slice(0,10); };
+function ratingClosed(date){ const n=nowET(), c=nextDay(date); return n.date > c || (n.date === c && n.min >= RATING_CLOSE_MIN); }
+const ratingCloseLabel = date => `${DOW[new Date(nextDay(date)+"T12:00:00").getDay()].slice(0,3)} ${fmtMin(RATING_CLOSE_MIN)}`;
+const fmtDate = iso => new Date(iso+"T12:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"});
+const weekKey = () => `${MENU.term} · Week ${MENU.week}`;
+const mealKey = (date, meal) => `${date}|${meal}`;
+
+/* ===================== STORAGE / BACKEND ===================== */
+const local = {
+  get(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+// Keep track of what THIS phone already rated, so people don't rate the same meal twice.
+const myRatings = () => local.get("sigep_my_ratings", {});
+const myName = () => local.get("sigep_profile", {}).name || local.get("sigep_name", "");
+
+const API = {
+  live: () => !!CONFIG.BACKEND_URL,
+  async send(record){
+    record.submittedAt = new Date().toISOString();
+    // Always keep a local copy (powers demo mode + offline safety).
+    const all = local.get("sigep_records", []); all.push(record); local.set("sigep_records", all);
+    if (!API.live()) return true;
+    try{
+      await fetch(CONFIG.BACKEND_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(record) });
+      return true;
+    }catch(e){ return false; }
+  }
+};
+
+/* ===================== BOOT ===================== */
+async function boot(){
+  try{
+    const r = await fetch(CONFIG.MENU_URL, {cache:"no-store"});
+    MENU = await r.json();
+  }catch(e){
+    $("#weekTitle").textContent = "Menu not available";
+    document.querySelectorAll(".view").forEach(v=>v.innerHTML='<div class="empty">Couldn’t load this week’s menu. Check your connection and reopen the app.</div>');
+    show("week"); return;
+  }
+  $("#weekTitle").innerHTML = `Week <b>${esc(MENU.week)}</b> · ${esc(MENU.term)}`;
+  const last = MENU.days[MENU.days.length-1].date;
+  $("#weekSub").textContent = `${fmtDate(MENU.days[0].date)} – ${fmtDate(last)}`;
+  const t = todayISO();
+  selDay = (MENU.days.find(d=>d.date===t) || (t > last ? MENU.days[MENU.days.length-1] : MENU.days[0])).date;
+  renderWeek(); renderDay(); renderLate(); renderSugg();
+  const start = location.hash.replace("#","");
+  show(["week","day","late","sugg"].includes(start) ? start : (MENU.days.some(d=>d.date===t) ? "day" : "week"));
+  setupInstallHint();
+  if (!local.get("sigep_profile", null) && !local.get("sigep_profile_skipped", false)) setTimeout(openProfile, 450);
+}
+
+function show(view){
+  if (view === "late" && MENU) renderLate();   // refresh open/closed status
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.id==="view-"+view));
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("active", b.dataset.view===view));
+  history.replaceState(null,"","#"+view);
+  window.scrollTo({top:0});
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>show(b.dataset.view)));
+
+/* ===================== WEEK VIEW ===================== */
+function mealCell(label, m){
+  if(!m) return `<div class="meal none"><div class="lbl">${label}</div><div class="t">No ${label.toLowerCase()} served</div></div>`;
+  const sides = m.sides && m.sides.length ? ` · ${m.sides.map(esc).join(" · ")}` : "";
+  return `<div class="meal"><div class="lbl">${label}</div><div class="t">${esc(m.title)}</div><div class="d">${esc(m.desc)}${sides}</div></div>`;
+}
+function renderWeek(){
+  const t = todayISO();
+  $("#weekList").innerHTML = MENU.days.map(d => `
+    <article class="daycard ${d.date===t?"today":""}">
+      <div class="dayhead">
+        <div><span class="dn">${esc(d.day)}</span>${d.date===t?'<span class="todaytag">TODAY</span>':""}</div>
+        <div class="dd">${fmtDate(d.date)}</div>
+      </div>
+      <div class="meals">${mealCell("LUNCH", d.lunch)}${mealCell("DINNER", d.dinner)}</div>
+      <button class="go" onclick="selDay='${d.date}';renderDay();show('day')">Open ${esc(d.day)} &amp; rate →</button>
+    </article>`).join("");
+}
+
+/* ===================== DAY VIEW ===================== */
+function renderDay(){
+  const t = todayISO();
+  $("#dayPicker").innerHTML = MENU.days.map(d => `
+    <button class="chip ${d.date===selDay?"sel":""}" onclick="selDay='${d.date}';renderDay()">
+      <div class="a">${d.date===t?"TODAY":esc(d.day.slice(0,3).toUpperCase())}</div>
+      <div class="b">${new Date(d.date+"T12:00:00").getDate()}</div>
+    </button>`).join("");
+  const d = MENU.days.find(x=>x.date===selDay);
+  $("#dayBody").innerHTML = `<h2 class="section">${esc(d.day)}, ${fmtDate(d.date)}</h2>` +
+    ["lunch","dinner"].map(meal => mealBlock(d, meal)).join("");
+}
+function mealBlock(d, meal){
+  const m = d[meal];
+  const Label = meal[0].toUpperCase()+meal.slice(1);
+  if(!m) return `<div class="empty">No ${meal} on ${esc(d.day)}.</div>`;
+  const key = mealKey(d.date, meal);
+  const mine = myRatings()[key];
+  const future = !mealStarted(d.date, meal);
+  let rateHTML;
+  if (mine){
+    rateHTML = `<div class="done"><span class="score">${mine.rating}/10</span><span>Thanks! Your rating was sent to the meal plan.${mine.feedback?`<br><small>“${esc(mine.feedback)}”</small>`:""}</span></div>`;
+  } else if (future){
+    rateHTML = `<div class="rate"><div class="q">Rating opens once this meal is served</div></div>`;
+  } else if (ratingClosed(d.date)){
+    rateHTML = `<div class="rate"><div class="q">Ratings closed <span>${ratingCloseLabel(d.date)}</span></div></div>`;
+  } else {
+    const p = pending[key];
+    rateHTML = `
+      <div class="rate">
+        <div class="q">Rate this ${meal} <span>Open until ${ratingCloseLabel(d.date)}</span></div>
+        <div class="scale">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="${p===n?"sel":""}" onclick="pick('${key}',${n})">${n}</button>`).join("")}</div>
+        <div class="scale-ends"><span>1 = bad</span><span>10 = elite</span></div>
+        <textarea id="fb-${meal}" placeholder="Feedback for the chef (optional): portion size, seasoning, what to bring back…" maxlength="600"></textarea>
+        <div class="row">
+          <input type="text" id="nm-${meal}" placeholder="Your name (optional)" value="${esc(myName())}">
+          <button class="btn" ${p?"":"disabled"} onclick="submitRating('${d.date}','${meal}')">Submit</button>
+        </div>
+      </div>`;
+  }
+  return `
+    <div class="bigmeal ${meal}">
+      <span class="lbl">${Label.toUpperCase()}</span> <small style="color:var(--muted);margin-left:6px;font-weight:600">${MEAL_TIMES[meal].label}</small>
+      <h3>${esc(m.title)}</h3>
+      <p class="desc">${esc(m.desc)}</p>
+      ${m.sides && m.sides.length ? `<ul class="sides">${m.sides.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>` : ""}
+      ${rateHTML}
+    </div>`;
+}
+function pick(key, n){
+  // keep any typed feedback while re-rendering
+  const saved = {}; ["lunch","dinner"].forEach(m=>{ const f=$("#fb-"+m), nm=$("#nm-"+m); if(f) saved[m]={f:f.value,n:nm.value}; });
+  pending[key] = n; renderDay();
+  Object.entries(saved).forEach(([m,v])=>{ const f=$("#fb-"+m), nm=$("#nm-"+m); if(f){f.value=v.f; nm.value=v.n;} });
+}
+async function submitRating(date, meal){
+  const key = mealKey(date, meal), rating = pending[key];
+  if(!rating) return;
+  if(ratingClosed(date)){ toast("Ratings for this meal just closed"); renderDay(); return; }
+  const d = MENU.days.find(x=>x.date===date);
+  const feedback = $("#fb-"+meal).value.trim();
+  const name = $("#nm-"+meal).value.trim();
+  if(name) local.set("sigep_name", name);
+  const ok = await API.send({ type:"rating", week:weekKey(), day:d.day, date, meal:meal[0].toUpperCase()+meal.slice(1), dish:d[meal].title, rating, feedback, name });
+  const mr = myRatings(); mr[key] = {rating, feedback}; local.set("sigep_my_ratings", mr);
+  delete pending[key]; renderDay();
+  toast(ok ? "Rating sent — thanks!" : "Saved on your phone. Couldn’t reach the server.");
+}
+
+/* ===================== LATE PLATES ===================== */
+const myLate = () => local.get("sigep_my_late", {});    // mealKey -> true
+const lateSel = new Set();
+function renderLate(){
+  const mine = myLate();
+  $("#lpName").value = $("#lpName").value || myName();
+  $("#lateList").innerHTML = MENU.days.map(d => {
+    const rows = ["lunch","dinner"].filter(m=>d[m]).map(meal => {
+      const key = mealKey(d.date, meal), open = lateOpen(d.date, meal), req = !!mine[key];
+      if (!open) lateSel.delete(key);
+      let right;
+      if (req) right = `<span class="pill req">✓ Requested</span>${open?`<button class="linkbtn" onclick="cancelLate('${d.date}','${meal}')">Cancel</button>`:""}`;
+      else right = open ? `<span class="pill open">Closes ${d.date===todayISO()?"":d.day.slice(0,3)+" "}${fmtMin(cutoffMin(meal))}</span>` : `<span class="pill closed">Closed</span>`;
+      return `<label class="lp-row ${open||req?"":"closed"}">
+        <input type="checkbox" ${req?"checked disabled":""} ${!open&&!req?"disabled":""} ${lateSel.has(key)?"checked":""} onchange="toggleLate('${key}',this.checked)">
+        <div class="info"><div class="m ${meal}">${meal.toUpperCase()} · ${MEAL_TIMES[meal].short}</div><div class="dish">${esc(d[meal].title)}</div></div>
+        <div style="text-align:right">${right}</div></label>`;
+    }).join("");
+    return `<div class="lp-day"><div class="dayhead"><div><span class="dn">${esc(d.day)}</span>${d.date===todayISO()?'<span class="todaytag">TODAY</span>':""}</div><div class="dd">${fmtDate(d.date)}</div></div>${rows}</div>`;
+  }).join("");
+  updateLateBtn();
+}
+function toggleLate(key, on){ on ? lateSel.add(key) : lateSel.delete(key); updateLateBtn(); }
+function updateLateBtn(){
+  const n = lateSel.size, b = $("#lpBtn");
+  b.disabled = !n; b.textContent = n ? `Request ${n} late plate${n>1?"s":""}` : "Select meals above";
+}
+async function submitLate(){
+  const name = $("#lpName").value.trim();
+  if (!name){ $("#lpName").focus(); toast("Add your name so the chef can label your plate"); return; }
+  local.set("sigep_name", name);
+  const note = $("#lpNote").value.trim();
+  const keys = [...lateSel].filter(k => { const [date, meal] = k.split("|"); return lateOpen(date, meal); });
+  if (keys.length < lateSel.size) toast("Some meals just closed and were skipped");
+  let ok = true; const mine = myLate();
+  for (const k of keys){
+    const [date, meal] = k.split("|"); const d = MENU.days.find(x=>x.date===date);
+    ok = (await API.send({ type:"lateplate", action:"Requested", week:weekKey(), day:d.day, date, meal:meal[0].toUpperCase()+meal.slice(1), dish:d[meal].title, name, note, diet:dietText() })) && ok;
+    mine[k] = true;
+  }
+  local.set("sigep_my_late", mine); lateSel.clear(); $("#lpNote").value = ""; renderLate();
+  if (keys.length) toast(ok ? `Late plate${keys.length>1?"s":""} requested ✓` : "Saved on your phone. Couldn’t reach the server.");
+}
+async function cancelLate(date, meal){
+  if (!lateOpen(date, meal)){ toast("Too late to cancel this one"); renderLate(); return; }
+  const d = MENU.days.find(x=>x.date===date), mine = myLate();
+  await API.send({ type:"lateplate", action:"Cancelled", week:weekKey(), day:d.day, date, meal:meal[0].toUpperCase()+meal.slice(1), dish:d[meal].title, name:$("#lpName").value.trim()||myName(), note:"" });
+  delete mine[mealKey(date, meal)]; local.set("sigep_my_late", mine); renderLate();
+  toast("Late plate cancelled");
+}
+setInterval(()=>{ if (MENU && $("#view-late").classList.contains("active")) renderLate(); }, 60000);
+
+/* ===================== SUGGESTIONS ===================== */
+const CATS = [
+  {id:"Lunch",   icon:"🥪", bg:"rgba(141,198,63,.16)", sub:"Lunch meal requests",  ph:"e.g. Buffalo chicken wraps"},
+  {id:"Dinner",  icon:"🍽️", bg:"rgba(150,100,210,.16)", sub:"Dinner meal requests", ph:"e.g. Steak night with mashed potatoes"},
+  {id:"Dessert", icon:"🍪", bg:"rgba(217,71,95,.14)", sub:"Dessert requests",     ph:"e.g. Banana pudding"},
+  {id:"Drink",   icon:"🥤", bg:"rgba(70,130,200,.16)", sub:"Drink requests",       ph:"e.g. Sweet tea, lemonade"}
+];
+function renderSugg(){
+  const mine = local.get("sigep_records", []).filter(r=>r.type==="suggestion");
+  $("#suggList").innerHTML = CATS.map(c => {
+    const list = mine.filter(r=>r.category===c.id).slice(-3).reverse();
+    return `
+    <div class="sugg">
+      <div class="h"><div class="ic" style="background:${c.bg}">${c.icon}</div><div><h3>${c.id}</h3><div class="s">${c.sub}</div></div></div>
+      <textarea id="sg-${c.id}" placeholder="${c.ph}" maxlength="300" style="min-height:56px"></textarea>
+      <div class="row"><button class="btn gold" onclick="submitSugg('${c.id}')">Send ${c.id.toLowerCase()} request</button></div>
+      ${list.length?`<ul>${list.map(r=>`<li>${esc(r.text)} <small>· you, ${new Date(r.submittedAt).toLocaleDateString()}</small></li>`).join("")}</ul>`:""}
+    </div>`;
+  }).join("");
+}
+async function submitSugg(cat){
+  const box = $("#sg-"+cat), text = box.value.trim();
+  if(!text){ box.focus(); return; }
+  const ok = await API.send({ type:"suggestion", week:weekKey(), category:cat, text, name:myName() });
+  renderSugg();
+  toast(ok ? `${cat} request sent!` : "Saved on your phone. Couldn’t reach the server.");
+}
+
+/* ===================== PROFILE (one-time setup) ===================== */
+const DIETS = ["Vegetarian","Vegan","Pescatarian","Gluten-free","Dairy-free","Nut allergy","Shellfish allergy","Egg allergy","Halal","Kosher"];
+const deviceId = (() => { let id = local.get("sigep_device", ""); if (!id){ id = Math.random().toString(36).slice(2,10)+Date.now().toString(36); local.set("sigep_device", id); } return id; })();
+const profile = () => local.get("sigep_profile", {});
+const dietText = () => { const p = profile(); return [...(p.diet||[]), p.dietOther].filter(Boolean).join(", "); };
+let pPlan = "", pDiet = new Set();
+function openProfile(){
+  const p = profile();
+  $("#pName").value = p.name || local.get("sigep_name", "");
+  pPlan = (p.plan === "Full" || p.plan === "Half") ? p.plan : ""; pDiet = new Set(p.diet || []);
+  $("#pDietOther").value = p.dietOther || "";
+  $("#pSkip").textContent = local.get("sigep_profile", null) ? "Cancel" : "Skip for now";
+  $("#pNameErr").style.display = "none"; $("#pPlanErr").style.display = "none";
+  paintProfile();
+  $("#profileOv").classList.add("show");
+}
+function paintProfile(){
+  document.querySelectorAll("#pPlan button").forEach(b => b.classList.toggle("sel", b.dataset.v === pPlan));
+  $("#pDiet").innerHTML = DIETS.map(d => `<button class="${pDiet.has(d)?"sel":""}" data-d="${d}">${d}</button>`).join("") +
+    `<button class="${pDiet.size===0?"sel":""}" data-d="">None</button>`;
+}
+$("#pPlan").addEventListener("click", e => { const b = e.target.closest("button"); if (b){ pPlan = b.dataset.v; $("#pPlanErr").style.display = "none"; paintProfile(); } });
+$("#pDiet").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset.d; if (!d) pDiet.clear(); else (pDiet.has(d) ? pDiet.delete(d) : pDiet.add(d)); paintProfile(); });
+function closeProfile(skipped){
+  if (skipped && !local.get("sigep_profile", null)) local.set("sigep_profile_skipped", true);
+  $("#profileOv").classList.remove("show");
+}
+async function saveProfile(){
+  const name = $("#pName").value.trim();
+  if (!name){ $("#pNameErr").style.display = "block"; $("#pName").focus(); return; }
+  if (!pPlan){ $("#pPlanErr").style.display = "block"; return; }
+  const p = { name, plan: pPlan, diet: [...pDiet], dietOther: $("#pDietOther").value.trim() };
+  local.set("sigep_profile", p); local.set("sigep_name", name);
+  closeProfile(false);
+  if (MENU){ renderDay(); renderLate(); $("#lpName").value = name; }
+  const ok = await API.send({ type:"profile", deviceId, name, plan:p.plan, diet:dietText() });
+  toast(ok ? `You’re set, ${name.split(" ")[0]} ✓` : "Saved on your phone. Couldn’t reach the server.");
+}
+
+/* ===================== LIGHT / DARK MODE ===================== */
+const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>';
+const sysDark = window.matchMedia("(prefers-color-scheme: dark)");
+const isDark = () => (document.documentElement.dataset.theme || (sysDark.matches ? "dark" : "light")) === "dark";
+function paintThemeBtn(){
+  const dark = isDark();
+  $("#themeBtn").innerHTML = dark ? SUN : MOON;          // shows what you'd switch TO
+  $("#themeBtn").setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#08121F" : "#003057");
+}
+function toggleTheme(){
+  const next = isDark() ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try{ localStorage.setItem("sigep_theme", next); }catch(e){}
+  paintThemeBtn();
+}
+sysDark.addEventListener?.("change", paintThemeBtn);
+paintThemeBtn();
+
+/* ===================== INSTALL HINT + TOAST ===================== */
+function setupInstallHint(){
+  const standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (standalone || local.get("sigep_hide_install", false)) return;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  $("#installText").textContent = ios ? "open this link in Safari, tap Share ⬆︎, then “Add to Home Screen.”" : "tap the ⋮ menu, then “Install app” or “Add to Home screen.”";
+  $("#installHint").classList.add("show");
+}
+function dismissInstall(){ local.set("sigep_hide_install", true); $("#installHint").classList.remove("show"); }
+let tt; function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),2400); }
+
+if ("serviceWorker" in navigator) { try { navigator.serviceWorker.register("sw.js").catch(()=>{}); } catch(e){} }
+boot();
+</script>
+</body>
+</html>

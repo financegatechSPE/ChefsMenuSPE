@@ -1,0 +1,73 @@
+{
+  "week": 12,
+  "term": "Fall 2026",
+  "weekOf": "2026-11-09",
+  "days": [
+    {
+      "day": "Monday",
+      "date": "2026-11-09",
+      "lunch": {
+        "title": "Texmex Chicken Sandwich",
+        "desc": "Juicy grilled chicken breast, toasted bun, jalapeño slaw & crispy fried onions",
+        "sides": ["Red Bean & Corn Salad w/ Chipotle Citrus & Agave Vinaigrette"]
+      },
+      "dinner": {
+        "title": "Chicken Piccata",
+        "desc": "With butter, garlic, wine, lemon & capers",
+        "sides": ["Cracked Potatoes", "Sautéed Broccoli", "Dinner Rolls"]
+      }
+    },
+    {
+      "day": "Tuesday",
+      "date": "2026-11-10",
+      "lunch": {
+        "title": "Seasonal Rice & Chicken Bowl",
+        "desc": "Brown rice, sweet potatoes, roasted chickpeas, kale, grilled chicken & feta cheese w/ apple-Dijon vinaigrette",
+        "sides": []
+      },
+      "dinner": {
+        "title": "Blackened Tilapia & Grits",
+        "desc": "Blackened tilapia filets w/ cheddar bay grits",
+        "sides": ["Hush Puppies", "Whole Roasted Corn on the Cob"]
+      }
+    },
+    {
+      "day": "Wednesday",
+      "date": "2026-11-11",
+      "lunch": {
+        "title": "Cubano Sandwich",
+        "desc": "Shredded mojo pork, ham, cheese, pickles & mustard on pressed hoagies",
+        "sides": ["Red Beans & Rice"]
+      },
+      "dinner": {
+        "title": "Santa Fe Alfredo",
+        "desc": "Bowtie pasta w/ broccoli, green onions, bell peppers, shredded carrots & grilled chicken in a green-chili cream sauce",
+        "sides": ["Breadsticks & Side Salad"]
+      }
+    },
+    {
+      "day": "Thursday",
+      "date": "2026-11-12",
+      "lunch": {
+        "title": "Tenders",
+        "desc": "Hand-breaded chicken tenders w/ house-made \"Fil-a\" sauce",
+        "sides": ["Fresh Vegetables & Seasoned Fries"]
+      },
+      "dinner": {
+        "title": "Butter Chicken",
+        "desc": "Dark meat chicken in creamy butter curry sauce w/ fluffy basmati rice",
+        "sides": ["Simmered Cauliflower, Squash & Chickpeas", "Grilled Naan Bread"]
+      }
+    },
+    {
+      "day": "Friday",
+      "date": "2026-11-13",
+      "lunch": {
+        "title": "Chili Dogs",
+        "desc": "Classic dogs w/ beef chili, scallions, diced onions & cheese",
+        "sides": ["Loaded Potato Salad"]
+      },
+      "dinner": null
+    }
+  ]
+}
