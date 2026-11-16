@@ -1,71 +1,71 @@
 {
-  "week": 12,
+  "week": 13,
   "term": "Fall 2026",
-  "weekOf": "2026-11-09",
+  "weekOf": "2026-11-16",
   "days": [
     {
       "day": "Monday",
-      "date": "2026-11-09",
+      "date": "2026-11-16",
       "lunch": {
-        "title": "Texmex Chicken Sandwich",
-        "desc": "Juicy grilled chicken breast, toasted bun, jalapeño slaw & crispy fried onions",
-        "sides": ["Red Bean & Corn Salad w/ Chipotle Citrus & Agave Vinaigrette"]
+        "title": "Chicken Phillys",
+        "desc": "With grilled onions & peppers",
+        "sides": ["Crinkle Cut Fries & Garlic Aioli"]
       },
       "dinner": {
-        "title": "Chicken Piccata",
-        "desc": "With butter, garlic, wine, lemon & capers",
-        "sides": ["Cracked Potatoes", "Sautéed Broccoli", "Dinner Rolls"]
+        "title": "SigEp Friendsgiving Potluck",
+        "desc": "Potluck dinner at 7 PM: glazed ham, mashed potatoes, green bean casserole & dinner rolls",
+        "sides": []
       }
     },
     {
       "day": "Tuesday",
-      "date": "2026-11-10",
+      "date": "2026-11-17",
       "lunch": {
-        "title": "Seasonal Rice & Chicken Bowl",
-        "desc": "Brown rice, sweet potatoes, roasted chickpeas, kale, grilled chicken & feta cheese w/ apple-Dijon vinaigrette",
+        "title": "Shrimp Spring Roll Bowls",
+        "desc": "Sautéed shrimp & chicken, napa, carrots & onions w/ fresh mint & cucumbers, crispy wonton strips, vermicelli noodles & Thai spring roll sauce",
         "sides": []
       },
       "dinner": {
-        "title": "Blackened Tilapia & Grits",
-        "desc": "Blackened tilapia filets w/ cheddar bay grits",
-        "sides": ["Hush Puppies", "Whole Roasted Corn on the Cob"]
+        "title": "Chipotle Chicken Fajitas",
+        "desc": "Grilled & sliced chipotle-marinated chicken w/ peppers & onions",
+        "sides": ["Yellow Rice & Beans", "Soft Flour Tortillas", "Sour Cream & Salsa"]
       }
     },
     {
       "day": "Wednesday",
-      "date": "2026-11-11",
+      "date": "2026-11-18",
       "lunch": {
-        "title": "Cubano Sandwich",
-        "desc": "Shredded mojo pork, ham, cheese, pickles & mustard on pressed hoagies",
-        "sides": ["Red Beans & Rice"]
+        "title": "BBQ Pork Sandwiches",
+        "desc": "Slow-braised pulled pork on grilled Texas toast w/ smokehouse barbecue sauce & pickles",
+        "sides": ["Baked Beans & Coleslaw"]
       },
       "dinner": {
-        "title": "Santa Fe Alfredo",
-        "desc": "Bowtie pasta w/ broccoli, green onions, bell peppers, shredded carrots & grilled chicken in a green-chili cream sauce",
-        "sides": ["Breadsticks & Side Salad"]
+        "title": "Beef Bulgogi Bibimbap",
+        "desc": "Beef in Korean bulgogi sauce over steamed basmati rice & fried eggs",
+        "sides": ["Spicy Chili Zucchini", "Sweet Pickled Vegetables"]
       }
     },
     {
       "day": "Thursday",
-      "date": "2026-11-12",
+      "date": "2026-11-19",
       "lunch": {
-        "title": "Tenders",
-        "desc": "Hand-breaded chicken tenders w/ house-made \"Fil-a\" sauce",
-        "sides": ["Fresh Vegetables & Seasoned Fries"]
+        "title": "Pesto Chicken Ciabatta",
+        "desc": "Springer Mountain chicken breast, red onions, arugula & pesto mayo",
+        "sides": ["Seasoned Chips & Oranges"]
       },
       "dinner": {
-        "title": "Butter Chicken",
-        "desc": "Dark meat chicken in creamy butter curry sauce w/ fluffy basmati rice",
-        "sides": ["Simmered Cauliflower, Squash & Chickpeas", "Grilled Naan Bread"]
+        "title": "Spicy Sausage & Red Pepper Pasta",
+        "desc": "Tri-color rotini pasta, spicy tomato sauce w/ Italian sausage, chicken, grape tomatoes & spinach",
+        "sides": ["Sautéed Green Beans & Carrots", "Garlic Toast"]
       }
     },
     {
       "day": "Friday",
-      "date": "2026-11-13",
+      "date": "2026-11-20",
       "lunch": {
-        "title": "Chili Dogs",
-        "desc": "Classic dogs w/ beef chili, scallions, diced onions & cheese",
-        "sides": ["Loaded Potato Salad"]
+        "title": "Breakfast Burritos",
+        "desc": "House-ground chorizo, shredded potatoes, scrambled eggs, cheese & black beans",
+        "sides": ["Sliced Fruit"]
       },
       "dinner": null
     }
